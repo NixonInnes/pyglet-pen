@@ -1,4 +1,4 @@
-from typing import Any, Literal
+from typing import Any, Callable, Optional, Literal
 
 from pyglet_pen.component import Component, ComponentProperty
 from pyglet_pen import layout
@@ -7,12 +7,40 @@ from pyglet_pen import layout
 class ElementProperty[T](ComponentProperty[T]):
     pass
 
+class ElementCallback:
+    @staticmethod
+    def __do_nothing(*args, **kwargs):
+        pass
+
+    def __init__(self, callback: Optional[Callable]):
+        if callback is None:
+            callback = ElementCallback.__do_nothing
+        self._default_callback = callback
+        
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        callback = instance.__dict__.get(self, self._default_callback)
+        return callback
+    
+    def __set__(self, instance, value):
+        instance.__dict__[self] = value
+    
+    def __call__(self, instance, *args, **kwargs):
+        callback = instance.__dict__.get(self, self._default_callback)
+        return callback(instance, *args, **kwargs)
+        
 
 class Element(Component):
     Proxy = None
     mouse_over_enabled = True
 
-    callback_on_mouse_motion
+    callback_on_mouse_motion = ElementCallback()
+    callback_on_mouse_enter = ElementCallback()
+    callback_on_mouse_leave = ElementCallback()
+    callback_on_mouse_press = ElementCallback()
+    callback_on_mouse_release = ElementCallback()
+    callback_on_mouse_scroll = ElementCallback()
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls, *args, **kwargs)
@@ -47,22 +75,22 @@ class Element(Component):
             return self.x <= x <= self.x + self.width and self.y <= y <= self.y + self.height
 
     def on_mouse_motion(self, x, y, dx, dy):
-        pass
+        self.callback_on_mouse_motion(self)
 
     def on_mouse_enter(self, x, y):
-        pass
+        self.callback_on_mouse_enter(self)
 
     def on_mouse_leave(self, x, y):
-        pass
+        self.callback_on_mouse_leave(self)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        pass
+        self.callback_on_mouse_press(self)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        pass
+        self.callback_on_mouse_release(self)
 
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
-        pass
+        self.callback_on_mouse_scroll(self)
 
 
 
