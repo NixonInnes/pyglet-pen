@@ -1,10 +1,12 @@
+from itertools import chain
 from typing import Callable
 
-from .named_descriptor import NamedDescriptor, NamedDescriptorMeta
+from .classproperty import classproperty
+from .named_descriptor2 import NamedDescriptor, NamedDescriptorMeta
 from .types import T
 
 
-class SubscribableProperty[T](NamedDescriptor):
+class AttributeSubscriber[T](NamedDescriptor):
     def __init__(self, default: T):
         self._default = default
     
@@ -22,23 +24,30 @@ class SubscribableProperty[T](NamedDescriptor):
         del instance.__dict__[self]
 
 
-class SubscribeProperties(metaclass=NamedDescriptorMeta):
-    __extend_named_descriptors__ = True
-    
+class SubscriberContainer(metaclass=NamedDescriptorMeta):
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls)
         instance._subscriptions = {}
         for k, v in kwargs.items():
-            if k in cls.__named_descriptors__:
+            if k in cls.named_attributes:
                 setattr(instance, k, v)
         return instance
     
-    def subscribe_to_property(self, property_name: str, callback: Callable[[T], None]):
-        self._subscriptions.setdefault(property_name, []).append(callback)
+    @classproperty
+    def named_attributes(cls):
+        return cls.get_subscribable_attribute_names()
+
+    @classmethod
+    def get_subscribable_attribute_names(cls):
+        return list(chain.from_iterable([getattr(cls, container) for container in cls.__name_containers__]))
+    
+
+    def subscribe_to_attribute(self, attr_name: str, callback: Callable[[T], None]):
+        self._subscriptions.setdefault(attr_name, []).append(callback)
 
     @property
-    def property_names(self):
-        return self.__named_descriptors__
+    def attribute_name_containers(self):
+        return self.__name_containers__
     
     def __repr__(self):
-        return f"{self.__class__.__name__}({', '.join(f'{k}={getattr(self, k)}' for k in self.property_names)})"
+        return f"{self.__class__.__name__}({', '.join(f'{k}={getattr(self, k)}' for k in self.named_attributes)})"

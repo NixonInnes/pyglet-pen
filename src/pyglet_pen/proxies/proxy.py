@@ -6,7 +6,7 @@ from pyglet_pen.utilities.types import T
 
 
 class ProxyProperty[T](ComponentProperty[T]):
-    pass
+    __name_container__ = "__proxy_properties__"
 
 
 class Proxy(Component):

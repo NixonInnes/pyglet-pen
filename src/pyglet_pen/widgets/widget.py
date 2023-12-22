@@ -19,7 +19,13 @@ class Widget(Component):
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
-        self.layout = self.Layout(*args, **kwargs)
+        self.layout = self.Layout(
+            **{
+                k: v
+                for k, v in kwargs.items()
+                if k in self.Layout.__named_descriptors__
+            }
+        )
 
 
 class FloatingWidget(Widget):

@@ -5,14 +5,16 @@ from pyglet_pen import layout
 
 
 class ElementProperty[T](ComponentProperty[T]):
-    pass
+    __name_container__ = "__element_properties__"
 
-class ElementCallback:
+class ElementCallback[T](ComponentProperty[T]):
+    __name_container__ = "__element_callbacks__"
+
     @staticmethod
     def __do_nothing(*args, **kwargs):
         pass
 
-    def __init__(self, callback: Optional[Callable]):
+    def __init__(self, callback: Optional[Callable] = None):
         if callback is None:
             callback = ElementCallback.__do_nothing
         self._default_callback = callback
@@ -78,6 +80,7 @@ class Element(Component):
         self.callback_on_mouse_motion(self)
 
     def on_mouse_enter(self, x, y):
+        print("on_mouse_enter")
         self.callback_on_mouse_enter(self)
 
     def on_mouse_leave(self, x, y):

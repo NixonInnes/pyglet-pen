@@ -6,7 +6,7 @@ from pyglet_pen.utilities.types import T
 
 
 class ComponentProperty[T](SubscribableProperty[T]):
-    pass
+    __name_container__ = "__component_properties__"
 
 
 class Component(SubscribeProperties):
