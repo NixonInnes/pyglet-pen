@@ -1,6 +1,3 @@
-from typing import Literal
-
-from pyglet_pen.component import ComponentProperty
 
 from .layout import Layout
 

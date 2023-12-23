@@ -1,13 +1,13 @@
-from typing import Any, Callable, Optional, Literal
+from typing import Any, Callable, Optional
 
-from pyglet_pen.component import Component, ComponentProperty
+from pyglet_pen.component import Component, ComponentAttribute
 from pyglet_pen import layout
 
 
-class ElementProperty[T](ComponentProperty[T]):
-    __name_container__ = "__element_properties__"
+class ElementAttribute[T](ComponentAttribute[T]):
+    __name_container__ = "__element_attributes__"
 
-class ElementCallback[T](ComponentProperty[T]):
+class ElementCallback[T](ComponentAttribute[T]):
     __name_container__ = "__element_callbacks__"
 
     @staticmethod
@@ -51,6 +51,7 @@ class Element(Component):
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
+        print("Element kwargs:", kwargs)
         self.proxy = self.Proxy(*args, **kwargs)
         self.apply_proxy_property_subscriptions()
         

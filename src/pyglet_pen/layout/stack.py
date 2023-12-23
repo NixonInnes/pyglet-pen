@@ -1,13 +1,11 @@
 from typing import Literal
 
-from pyglet_pen.component import ComponentProperty
-
-from .layout import Layout
+from .layout import Layout, LayoutAttribute
 
 
 class StackLayout(Layout):
-    stack_direction = ComponentProperty[Literal["vertical", "horizontal"]]("vertical")
-    padding = ComponentProperty[int](0)
+    stack_direction = LayoutAttribute[Literal["vertical", "horizontal"]]("vertical")
+    padding = LayoutAttribute[int](0)
 
     def __init__(self, *args, **kwargs):
         self.contents = []

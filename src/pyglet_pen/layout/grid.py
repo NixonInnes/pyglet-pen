@@ -1,13 +1,12 @@
 from typing import Literal
 
-from pyglet_pen.component import ComponentProperty
 
-from .layout import Layout
+from .layout import Layout, LayoutAttribute
 
 
 class GridLayout(Layout):
-    n_rows = ComponentProperty[int](1)
-    n_cols = ComponentProperty[int](1)
+    n_rows = LayoutAttribute[int](1)
+    n_cols = LayoutAttribute[int](1)
 
     def __init__(self, *args, **kwargs):
         self.contents = {}
@@ -54,11 +53,11 @@ class GridLayout(Layout):
         
 
 class GridLayoutCell(Layout):
-    vertical_alignment = ComponentProperty[Literal["top", "center", "bottom"]]("center")
-    horizontal_alignment = ComponentProperty[Literal["left", "center", "right"]]("center")
-    vertical_fill = ComponentProperty[bool](False)
-    horizontal_fill = ComponentProperty[bool](False)
-    margin = ComponentProperty[int](0)
+    vertical_alignment = LayoutAttribute[Literal["top", "center", "bottom"]]("center")
+    horizontal_alignment = LayoutAttribute[Literal["left", "center", "right"]]("center")
+    vertical_fill = LayoutAttribute[bool](False)
+    horizontal_fill = LayoutAttribute[bool](False)
+    margin = LayoutAttribute[int](0)
 
     def __init__(self, *args, **kwargs):
         self.content = None

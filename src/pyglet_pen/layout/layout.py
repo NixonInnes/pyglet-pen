@@ -1,14 +1,17 @@
 from typing import Literal
 
-from pyglet_pen.component import Component, ComponentProperty
+from pyglet_pen.component import Component, ComponentAttribute
+from pyglet_pen.utilities.types import T
 
+class LayoutAttribute[T](ComponentAttribute[T]):
+    __name_container__ = "__layout_attributes__"
 
 class Layout(Component):
-    vertical_alignment = ComponentProperty[Literal["top", "center", "bottom"]]("center")
-    horizontal_alignment = ComponentProperty[Literal["left", "center", "right"]]("center")
-    vertical_fill = ComponentProperty[bool](False)
-    horizontal_fill = ComponentProperty[bool](False)
-    margin = ComponentProperty[int](0)
+    vertical_alignment = LayoutAttribute[Literal["top", "center", "bottom"]]("center")
+    horizontal_alignment = LayoutAttribute[Literal["left", "center", "right"]]("center")
+    vertical_fill = LayoutAttribute[bool](False)
+    horizontal_fill = LayoutAttribute[bool](False)
+    margin = LayoutAttribute[int](0)
 
     @property
     def n_items(self):

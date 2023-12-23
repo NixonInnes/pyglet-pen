@@ -1,26 +1,26 @@
 import pyglet
 from typing import Optional
 
-from pyglet_pen.proxies.proxy import Proxy, ProxyProperty
+from pyglet_pen.proxies.proxy import Proxy, ProxyAttribute
 from pyglet_pen.utilities.types import AnchorType, ColorType
 
 
 class ShapeProxy(Proxy):
-    color: ColorType = ProxyProperty[ColorType]((255, 255, 255, 255))
-    rotation = ProxyProperty[int](0)
-    anchor_x = ProxyProperty[AnchorType](0)
-    anchor_y = ProxyProperty[AnchorType](0)
-    opacity = ProxyProperty[int](255)
+    color: ColorType = ProxyAttribute[ColorType]((255, 255, 255, 255))
+    rotation = ProxyAttribute[int](0)
+    anchor_x = ProxyAttribute[AnchorType](0)
+    anchor_y = ProxyAttribute[AnchorType](0)
+    opacity = ProxyAttribute[int](255)
 
 
 class ArcProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Arc
     constructor_args = ["x", "y", "radius", "angle", "start_angle", "closed", "color", "batch", "group"]
     base_property_subscriptions = False
-    #radius = ProxyProperty[float](10.0)
-    angle = ProxyProperty[float](6.283185307179586)
-    start_angle = ProxyProperty[float](0.0)
-    closed = ProxyProperty[bool](False)
+    #radius = ProxyAttribute[float](10.0)
+    angle = ProxyAttribute[float](6.283185307179586)
+    start_angle = ProxyAttribute[float](0.0)
+    closed = ProxyAttribute[bool](False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
@@ -50,8 +50,8 @@ class CircleProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Circle
     constructor_args = ["x", "y", "radius", "segments", "color", "batch", "group"]
     base_property_subscriptions = False
-    #radius = ProxyProperty[float](10.0)
-    segments = ProxyProperty[Optional[int]](None)
+    #radius = ProxyAttribute[float](10.0)
+    segments = ProxyAttribute[Optional[int]](None)
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
@@ -83,9 +83,9 @@ class EllipseProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Ellipse
     constructor_args = ["x", "y", "a", "b", "segments", "color", "batch", "group"]
     base_property_subscriptions = False
-    # a = ProxyProperty[float](10.0)
-    # b = ProxyProperty[float](10.0)
-    segments = ProxyProperty[Optional[int]](None)
+    # a = ProxyAttribute[float](10.0)
+    # b = ProxyAttribute[float](10.0)
+    segments = ProxyAttribute[Optional[int]](None)
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
@@ -120,9 +120,9 @@ class SectorProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Sector
     constructor_args = ["x", "y", "radius", "angle", "start_angle", "color", "batch", "group"]
     base_property_subscriptions = False
-    #radius = ProxyProperty[float](10.0)
-    angle = ProxyProperty[float](6.283185307179586)
-    start_angle = ProxyProperty[float](0.0)
+    #radius = ProxyAttribute[float](10.0)
+    angle = ProxyAttribute[float](6.283185307179586)
+    start_angle = ProxyAttribute[float](0.0)
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
@@ -155,7 +155,7 @@ class LineProxy(ShapeProxy):
     constructor_aliases = {"thickness": "width", "width": "x2", "height": "y2"}
     base_property_subscriptions = False
 
-    thickness = ProxyProperty[int](1)
+    thickness = ProxyAttribute[int](1)
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
@@ -178,31 +178,31 @@ class RectangleProxy(ShapeProxy):
 class BoxProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Box
     constructor_args = ["x", "y", "width", "height", "thickness", "color", "batch", "group"]
-    thickness = ProxyProperty[int](1)
+    thickness = ProxyAttribute[int](1)
 
 
 class BorderedRectangleProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.BorderedRectangle
     constructor_args = ["x", "y", "width", "height", "border", "color", "border_color", "batch", "group"]
-    border = ProxyProperty[int](1)
-    border_color: ColorType = ProxyProperty[ColorType]((255, 255, 255, 255))
+    border = ProxyAttribute[int](1)
+    border_color: ColorType = ProxyAttribute[ColorType]((255, 255, 255, 255))
 
 
 class TriangleProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Triangle
     constructor_args = ["x", "y", "x2", "y2", "x3", "y3", "color", "batch", "group"]
-    x2 = ProxyProperty[int](0)
-    y2 = ProxyProperty[int](0)
-    x3 = ProxyProperty[int](0)
-    y3 = ProxyProperty[int](0)
+    x2 = ProxyAttribute[int](0)
+    y2 = ProxyAttribute[int](0)
+    x3 = ProxyAttribute[int](0)
+    y3 = ProxyAttribute[int](0)
 
 
 class StarProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Star
     constructor_args = ["x", "y", "outer_radius", "inner_radius", "num_spikes", "color", "batch", "group"]
-    outer_radius = ProxyProperty[float](10.0)
-    inner_radius = ProxyProperty[float](5.0)
-    num_spikes = ProxyProperty[int](5)
+    outer_radius = ProxyAttribute[float](10.0)
+    inner_radius = ProxyAttribute[float](5.0)
+    num_spikes = ProxyAttribute[int](5)
 
 
 

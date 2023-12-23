@@ -1,12 +1,12 @@
 import pyglet
 from typing import Optional
 
-from pyglet_pen.component import Component, ComponentProperty
+from pyglet_pen.component import Component, ComponentAttribute
 from pyglet_pen.utilities.types import T
 
 
-class ProxyProperty[T](ComponentProperty[T]):
-    __name_container__ = "__proxy_properties__"
+class ProxyAttribute[T](ComponentAttribute[T]):
+    __name_container__ = "__proxy_attributes__"
 
 
 class Proxy(Component):
@@ -15,8 +15,8 @@ class Proxy(Component):
     constructor_aliases = {}
     base_property_subscriptions = True
 
-    batch = ProxyProperty[Optional[pyglet.graphics.Batch]](None)
-    group = ProxyProperty[Optional[pyglet.graphics.Group]](None)
+    batch = ProxyAttribute[Optional[pyglet.graphics.Batch]](None)
+    group = ProxyAttribute[Optional[pyglet.graphics.Group]](None)
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls, *args, **kwargs)
