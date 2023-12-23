@@ -1,7 +1,6 @@
 from typing import Any, Callable, Optional
 
 from pyglet_pen.component import Component, ComponentAttribute
-from pyglet_pen import layout
 
 
 class ElementAttribute[T](ComponentAttribute[T]):

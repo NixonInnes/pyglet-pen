@@ -46,3 +46,30 @@ def test_subscriber_container_base_instance():
     assert "b" in instance.named_attributes
     assert "c" in instance.named_attributes
     assert "d" not in instance.named_attributes
+
+def test_subscriber_container():
+    class TestClass(SubscriberContainer):
+        a = AttributeSubscriber(1)
+        b = AttributeSubscriber(2)
+        c = AttributeSubscriber("test")
+    
+    instance = TestClass(a=1, b=2, c="test", d=4)
+    
+
+    callback_target = None
+    def set_callback_target(value):
+        nonlocal callback_target
+        callback_target = f"a is {value}"
+    
+    instance.subscribe_to_attribute(
+        "a", set_callback_target
+    )
+
+    assert "a" in instance._subscriptions
+    assert set_callback_target in instance._subscriptions["a"]
+
+    instance.a = 100
+    assert callback_target == "a is 100"
+
+    instance.a = 200
+    assert callback_target == "a is 200"
