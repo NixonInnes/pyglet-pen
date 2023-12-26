@@ -1,5 +1,5 @@
 import pyglet
-from pyglet_pen.layout.stack import StackLayout
+from pyglet_pen.layouts import StackLayout
 from pyglet_pen.proxies.shapes import RectangleProxy
 
 

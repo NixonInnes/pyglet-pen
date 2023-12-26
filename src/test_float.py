@@ -1,6 +1,6 @@
 import pyglet
 
-from pyglet_pen.layout.floating import FloatingLayout
+from pyglet_pen.layouts import FloatingLayout
 from pyglet_pen.proxies.shapes import RectangleProxy
 
 def main():

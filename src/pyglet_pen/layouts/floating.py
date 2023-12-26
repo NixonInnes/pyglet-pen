@@ -3,8 +3,10 @@ from .layout import Layout
 
 
 class FloatingLayout(Layout):
-    def __init__(self, *args, **kwargs):
-        self.contents = []
+    def __new__(cls, *args, **kwargs):
+        instance = super().__new__(cls, *args, **kwargs)
+        instance.contents = []
+        return instance
     
     @property
     def n_items(self):

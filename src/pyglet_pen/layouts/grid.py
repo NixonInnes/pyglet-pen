@@ -8,17 +8,19 @@ class GridLayout(Layout):
     n_rows = LayoutAttribute[int](1)
     n_cols = LayoutAttribute[int](1)
 
-    def __init__(self, *args, **kwargs):
-        self.contents = {}
-        for i in range(self.n_rows):
-            for j in range(self.n_cols):
-                self.contents[(i, j)] = GridLayoutCell(
-                    vertical_alignment=self.vertical_alignment,
-                    horizontal_alignment=self.horizontal_alignment,
-                    vertical_fill=self.vertical_fill,
-                    horizontal_fill=self.horizontal_fill,
-                    margin=self.margin,
+    def __new__(cls, *args, **kwargs):
+        instance = super().__new__(cls, *args, **kwargs)
+        instance.contents = {}
+        for i in range(instance.n_rows):
+            for j in range(instance.n_cols):
+                instance.contents[(i, j)] = GridLayoutCell(
+                    vertical_alignment=instance.vertical_alignment,
+                    horizontal_alignment=instance.horizontal_alignment,
+                    vertical_fill=instance.vertical_fill,
+                    horizontal_fill=instance.horizontal_fill,
+                    margin=instance.margin,
                 )
+        return instance
     
     @property
     def n_items(self):

@@ -1,6 +1,6 @@
 import pyglet
 
-from pyglet_pen.layout.grid import GridLayout
+from pyglet_pen.layouts import GridLayout
 from pyglet_pen.proxies.shapes import RectangleProxy
 
 def main():

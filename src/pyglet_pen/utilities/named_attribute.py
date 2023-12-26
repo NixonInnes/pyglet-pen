@@ -53,47 +53,48 @@ class NamedAttributeMeta(type):
         cls_dict.update(cls_containers)
         return cls_dict
 
-    def inherit_build_cls_dict(cls, name, bases, cls_dict):
-        print("INHERIT BUILD")
-        cls_name_containers = []
-        cls_containers = defaultdict(list)
+    # Note: This is just not a great idea...
+    # def inherit_build_cls_dict(cls, name, bases, cls_dict):
+    #     print("INHERIT BUILD")
+    #     cls_name_containers = []
+    #     cls_containers = defaultdict(list)
         
-        for base in bases:
-            if hasattr(base, "__attr_name_containers__"):
-                base_name_containers = getattr(base, "__attr_name_containers__")
-                cls_name_containers.extend(base_name_containers)
-                for name_container in base_name_containers:
-                    cls_containers[name_container].extend(getattr(base, name_container, []))
-        for base_class in cls.__mro__[:-1]:
-            print("Adding Base class:", base_class)
-            for attr, attr_value in base_class.__dict__.items():
-                if isinstance(attr_value, NamedAttribute):
-                    print("Adding attr:", attr)
-                    attr_value.__set_name__(cls, attr)
-                    cls_containers[attr] = attr_value
+    #     for base in bases:
+    #         if hasattr(base, "__attr_name_containers__"):
+    #             base_name_containers = getattr(base, "__attr_name_containers__")
+    #             cls_name_containers.extend(base_name_containers)
+    #             for name_container in base_name_containers:
+    #                 cls_containers[name_container].extend(getattr(base, name_container, []))
+    #     for base_class in cls.__mro__[:-1]:
+    #         print("Adding Base class:", base_class)
+    #         for attr, attr_value in base_class.__dict__.items():
+    #             if isinstance(attr_value, NamedAttribute):
+    #                 print("Adding attr:", attr)
+    #                 attr_value.__set_name__(cls, attr)
+    #                 cls_containers[attr] = attr_value
                     
-                    container = attr_value.__name_container__
-                    cls_containers[container].append(attr)
-                    if container not in cls_name_containers:
-                        cls_name_containers.append(container)
+    #                 container = attr_value.__name_container__
+    #                 cls_containers[container].append(attr)
+    #                 if container not in cls_name_containers:
+    #                     cls_name_containers.append(container)
         
-        if "__attr_name_containers__" in cls_dict:
-            cls_dict["__attr_name_containers__"] = list(
-                set(cls_dict["__attr_name_containers__"] + cls_name_containers)
-            )
-        else:
-            cls_dict["__attr_name_containers__"] = cls_name_containers
-        cls_dict.update(cls_containers)
-        return cls_dict
+    #     if "__attr_name_containers__" in cls_dict:
+    #         cls_dict["__attr_name_containers__"] = list(
+    #             set(cls_dict["__attr_name_containers__"] + cls_name_containers)
+    #         )
+    #     else:
+    #         cls_dict["__attr_name_containers__"] = cls_name_containers
+    #     cls_dict.update(cls_containers)
+    #     return cls_dict
 
     def __new__(cls, name, bases, cls_dict):
-        pprint(f"NEW cls: {cls}, cls_dict: {cls_dict}")
+        #pprint(f"NEW cls: {cls}, cls_dict: {cls_dict}")
         cls_dict = cls.prebuild(cls, name, bases, cls_dict)
-        pprint(f"PREBUILD cls: {cls}, cls_dict: {cls_dict}")
+        #pprint(f"PREBUILD cls: {cls}, cls_dict: {cls_dict}")
         cls_dict = cls.build_cls_dict(cls, name, bases, cls_dict)
-        pprint(f"BUILD cls: {cls}, cls_dict: {cls_dict}")
+        #pprint(f"BUILD cls: {cls}, cls_dict: {cls_dict}")
         cls_dict = cls.postbuild(cls, name, bases, cls_dict)
-        pprint(f"POSTBUILD cls: {cls}, cls_dict: {cls_dict}")
+        #(f"POSTBUILD cls: {cls}, cls_dict: {cls_dict}")
         return super().__new__(cls, name, bases, cls_dict)
     
 

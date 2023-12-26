@@ -1,6 +1,6 @@
 import pyglet
 
-from pyglet_pen.layout.stack import StackLayout
+from pyglet_pen.layouts.stack import StackLayout
 from pyglet_pen.proxies.text import LabelProxy
 
 

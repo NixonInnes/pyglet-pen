@@ -1,6 +1,6 @@
 import pyglet
-from pyglet_pen.layout.stack import StackLayout
-from pyglet_pen.elements.shapes import Rectangle
+from pyglet_pen.layouts.stack import StackLayout
+from pyglet_pen.renderables.shapes import Rectangle
 
 
 def main():
@@ -31,8 +31,9 @@ def main():
         color=(255, 0, 0, 255), 
         batch=batch, 
         group=bg_group,
-        callback_on_mouse_enter=lambda _: print("Mouse entered"),
+        #callback_on_mouse_enter=lambda _: print("Mouse entered"),
     )
+    r.on_mouse_enter.subscribe(lambda *_, **__: print("Mouse entered"))
 
     l1.add(r)
 
