@@ -13,7 +13,7 @@ class Proxy(Component):
     BaseConstructor = None
     constructor_args = []
     constructor_aliases = {}
-    base_property_subscriptions = True
+    base_attr_subscriptions = True
 
     batch = ProxyAttribute[Optional[pyglet.graphics.Batch]](None)
     group = ProxyAttribute[Optional[pyglet.graphics.Group]](None)
@@ -28,8 +28,8 @@ class Proxy(Component):
         self.pre_build()
         self.build()
         self.post_build()
-        if self.base_property_subscriptions:
-            self.apply_base_property_subscriptions()
+        if self.base_attr_subscriptions:
+            self.apply_base_attr_subscriptions()
 
     def pre_build(self):
         pass
@@ -46,14 +46,14 @@ class Proxy(Component):
                for arg in self.constructor_args}
         )
 
-    def apply_base_property_subscriptions(self, properties=None):
-        if properties is None:
-            properties = self.property_names
-        for property_name in properties:
-            self.subscribe_to_property(
-                property_name, 
+    def apply_base_attr_subscriptions(self, attr_names=None):
+        if attr_names is None:
+            attr_names = self.named_attributes
+        for attr_name in attr_names:
+            self.subscribe_to_attribute(
+                attr_name, 
                 self.passthrough_subscription_factory(
                     self.base,
-                    property_name
+                    attr_name
                 )
             )

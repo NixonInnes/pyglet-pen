@@ -26,6 +26,7 @@ def main():
     )
 
     r1 = RectangleProxy(width=300, height=300, color=(255, 0, 0, 255), batch=batch, group=bg_group)
+    print(r1.named_attributes)
     r2 = RectangleProxy(width=100, height=100, color=(0, 255, 0, 255),  batch=batch, group=bg_group)
     r3 = RectangleProxy(width=50, height=50, color=(0, 0, 255, 255),  batch=batch, group=bg_group)
 

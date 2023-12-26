@@ -15,6 +15,7 @@ class AttributeSubscriber[T](NamedAttribute):
     
     def __set__(self, instance, value: T):
         instance.__dict__[self] = value
+        #if hasattr(instance, "_subscriptions"):
         for callback in instance._subscriptions.get(self.name, []):
             callback(value)
     
@@ -23,10 +24,14 @@ class AttributeSubscriber[T](NamedAttribute):
 
 
 class SubscriberContainer(NamedAttributeContainer):
-    def __new__(cls, *args, **kwargs):
-        instance = super().__new__(cls)
+    def __new_instance__(cls, instance):
         instance._subscriptions = {}
         return instance
+
+    # def __new__(cls, *args, **kwargs):
+    #     instance = super().__new__(cls, *args, **kwargs)
+    #     #instance._subscriptions = {}
+    #     return instance
        
     def subscribe_to_attribute(self, attr_name: str, callback: Callable[[T], None]) -> None:
         self._subscriptions.setdefault(attr_name, []).append(callback)
