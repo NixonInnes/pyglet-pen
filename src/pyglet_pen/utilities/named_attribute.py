@@ -19,16 +19,12 @@ class NamedAttribute:
 
 
 class NamedAttributeMeta(type):
-    def prebuild(cls, name, bases, cls_dict):
-        return cls_dict
-    
-    def postbuild(cls, name, bases, cls_dict):
-        return cls_dict
-        
-    def build_cls_dict(cls, name, bases, cls_dict):
+
+    def __new__(cls, name, bases, cls_dict):
         cls_name_containers = []
         cls_containers = defaultdict(list)
         
+        # Get all named attributes from base classes
         for base in bases:
             if hasattr(base, "__attr_name_containers__"):
                 base_name_containers = getattr(base, "__attr_name_containers__")
@@ -36,6 +32,7 @@ class NamedAttributeMeta(type):
                 for name_container in base_name_containers:
                     cls_containers[name_container].extend(getattr(base, name_container, []))
         
+        # Get all named attributes from this class
         for attr, attr_value in cls_dict.items():
             if isinstance(attr_value, NamedAttribute):
                 attr_value.__set_name__(cls, attr)
@@ -44,6 +41,7 @@ class NamedAttributeMeta(type):
                 if container not in cls_name_containers:
                     cls_name_containers.append(container)
         
+        # Update class dictionary
         if "__attr_name_containers__" in cls_dict:
             cls_dict["__attr_name_containers__"] = list(
                 set(cls_dict["__attr_name_containers__"] + cls_name_containers)
@@ -51,50 +49,7 @@ class NamedAttributeMeta(type):
         else:
             cls_dict["__attr_name_containers__"] = cls_name_containers
         cls_dict.update(cls_containers)
-        return cls_dict
-
-    # Note: This is just not a great idea...
-    # def inherit_build_cls_dict(cls, name, bases, cls_dict):
-    #     print("INHERIT BUILD")
-    #     cls_name_containers = []
-    #     cls_containers = defaultdict(list)
         
-    #     for base in bases:
-    #         if hasattr(base, "__attr_name_containers__"):
-    #             base_name_containers = getattr(base, "__attr_name_containers__")
-    #             cls_name_containers.extend(base_name_containers)
-    #             for name_container in base_name_containers:
-    #                 cls_containers[name_container].extend(getattr(base, name_container, []))
-    #     for base_class in cls.__mro__[:-1]:
-    #         print("Adding Base class:", base_class)
-    #         for attr, attr_value in base_class.__dict__.items():
-    #             if isinstance(attr_value, NamedAttribute):
-    #                 print("Adding attr:", attr)
-    #                 attr_value.__set_name__(cls, attr)
-    #                 cls_containers[attr] = attr_value
-                    
-    #                 container = attr_value.__name_container__
-    #                 cls_containers[container].append(attr)
-    #                 if container not in cls_name_containers:
-    #                     cls_name_containers.append(container)
-        
-    #     if "__attr_name_containers__" in cls_dict:
-    #         cls_dict["__attr_name_containers__"] = list(
-    #             set(cls_dict["__attr_name_containers__"] + cls_name_containers)
-    #         )
-    #     else:
-    #         cls_dict["__attr_name_containers__"] = cls_name_containers
-    #     cls_dict.update(cls_containers)
-    #     return cls_dict
-
-    def __new__(cls, name, bases, cls_dict):
-        #pprint(f"NEW cls: {cls}, cls_dict: {cls_dict}")
-        cls_dict = cls.prebuild(cls, name, bases, cls_dict)
-        #pprint(f"PREBUILD cls: {cls}, cls_dict: {cls_dict}")
-        cls_dict = cls.build_cls_dict(cls, name, bases, cls_dict)
-        #pprint(f"BUILD cls: {cls}, cls_dict: {cls_dict}")
-        cls_dict = cls.postbuild(cls, name, bases, cls_dict)
-        #(f"POSTBUILD cls: {cls}, cls_dict: {cls_dict}")
         return super().__new__(cls, name, bases, cls_dict)
     
 

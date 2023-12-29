@@ -11,22 +11,28 @@ def main():
     batch = pyglet.graphics.Batch()
 
     b = ButtonWidget(
-        vertical_alignment="center",
-        horizontal_alignment="center",
         x=50,
         y=50,
         width=200,
         height=50,
-        text="Hello World!",
+        label_text="Hello World!",
         #color=(255, 255, 255, 255),
         batch=batch,
-        group=fg_group,
+        background_group=bg_group,
+        label_group=fg_group,
+        on_click=lambda *_, **__: print("Hello World!"),
     )
 
     @window.event
     def on_draw():
         window.clear()
         batch.draw()
+
+    @window.event
+    def on_mouse_press(x, y, button, modifiers):
+        b.on_mouse_press(x, y, button, modifiers)
+
+    b.label_text = "Something else"
     
     pyglet.app.run()
 

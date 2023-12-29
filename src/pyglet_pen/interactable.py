@@ -11,7 +11,7 @@ class CallbackContainer:
         self.callbacks.append(callback)
 
 
-class UIElement:
+class Interactable:
     mouse_over_enabled = True
 
     def __new__(cls, *args, **kwargs):

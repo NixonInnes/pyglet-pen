@@ -28,10 +28,5 @@ class SubscriberContainer(NamedAttributeContainer):
         instance._subscriptions = {}
         return instance
 
-    # def __new__(cls, *args, **kwargs):
-    #     instance = super().__new__(cls, *args, **kwargs)
-    #     #instance._subscriptions = {}
-    #     return instance
-       
     def subscribe_to_attribute(self, attr_name: str, callback: Callable[[T], None]) -> None:
         self._subscriptions.setdefault(attr_name, []).append(callback)
