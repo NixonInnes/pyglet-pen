@@ -12,8 +12,8 @@ class ComponentAttribute[T](AttributeSubscriber[T]):
 class Component(SubscriberContainer):
     x = ComponentAttribute[int](0)
     y = ComponentAttribute[int](0)
-    width = ComponentAttribute[Optional[int]](100)
-    height = ComponentAttribute[Optional[int]](20)
+    width = ComponentAttribute[Optional[int]](None)
+    height = ComponentAttribute[Optional[int]](None)
     visible = ComponentAttribute[bool](True)
 
     def __new__(cls, *args, **kwargs):
