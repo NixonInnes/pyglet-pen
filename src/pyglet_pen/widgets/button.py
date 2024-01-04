@@ -1,11 +1,10 @@
 import pyglet
 from typing import Callable, Optional
 
-from pyglet_pen.interactable import Interactable
 from pyglet_pen.layouts import FloatingLayout
-from pyglet_pen.elements.shapes import Background, Rectangle
+from pyglet_pen.elements.shapes import Rectangle, BorderedRectangle
 from pyglet_pen.elements.text import Label
-from pyglet_pen.utilities.types import ColorType, AnchorType
+from pyglet_pen.utilities.types import ColorType
 
 
 from .widget import Widget, WidgetAttribute
@@ -20,6 +19,8 @@ class ButtonWidget(Widget):
     label_font_size = WidgetAttribute[int](12)
 
     background_color = WidgetAttribute[ColorType]((100, 100, 100, 255))
+    border_color = WidgetAttribute[ColorType]((20, 20, 20, 255))
+    border_width = WidgetAttribute[int](3)
     
     batch = WidgetAttribute[Optional[pyglet.graphics.Batch]](None)
     button_group = WidgetAttribute[Optional[pyglet.graphics.Group]](None)
@@ -29,20 +30,38 @@ class ButtonWidget(Widget):
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
+        self.background = self.build_background()
+        self.subscribe_to_attribute("background_color", lambda value: setattr(self.background, "color", value))
+        self.subscribe_to_attribute("border_color", lambda value: setattr(self.background, "border_color", value))
+        self.subscribe_to_attribute("border_width", lambda value: setattr(self.background, "border", value))
+        if self.on_click is not None:
+            self.background.on_mouse_press.subscribe(self.on_click)
         
-        self.background = Rectangle(
+        self.label = self.build_label()
+        self.subscribe_to_attribute("label_text", lambda value: setattr(self.label, "text", value))
+        self.subscribe_to_attribute("label_color", lambda value: setattr(self.label, "color", value))
+        self.subscribe_to_attribute("label_font_name", lambda value: setattr(self.label, "font_name", value))
+        self.subscribe_to_attribute("label_font_size", lambda value: setattr(self.label, "font_size", value))
+        
+        self.add_content(self.background)
+        self.add_content(self.label)
+
+    def build_background(self):
+        background = BorderedRectangle(
             x=self.x,
             y=self.y,
             width=self.width,
             height=self.height,
             color=self.background_color,
+            border=self.border_width,
+            border_color=self.border_color,
             batch=self.batch,
             group=self.button_group,
         )
-        if self.on_click is not None:
-            self.background.on_mouse_press.subscribe(self.on_click)
-
-        self.label = Label(
+        return background
+    
+    def build_label(self):
+        label = Label(
             text=self.label_text,
             font_name=self.label_font_name,
             font_size=self.label_font_size,
@@ -56,14 +75,28 @@ class ButtonWidget(Widget):
             group=self.label_group,
             align="center",
         )
-        self.add_content(self.background)
-        self.add_content(self.label)
-        
-        #self.on_mouse_press.subscribe(self.background.on_mouse_press)
+        return label
 
-        self.subscribe_to_attribute("label_text", lambda value: setattr(self.label, "text", value))
-        self.subscribe_to_attribute("label_color", lambda value: setattr(self.label, "color", value))
-        self.subscribe_to_attribute("label_font_name", lambda value: setattr(self.label, "font_name", value))
-        self.subscribe_to_attribute("label_font_size", lambda value: setattr(self.label, "font_size", value))
+class ToggleButtonWidget(ButtonWidget):
+    state = WidgetAttribute[bool](False)
+    on_toggle = WidgetAttribute[Optional[Callable]](None)
 
-        self.subscribe_to_attribute("background_color", lambda value: setattr(self.background, "color", value))
+    label_text_true = WidgetAttribute[str]("On")
+    label_text_false = WidgetAttribute[str]("Off")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.subscribe_to_attribute("state", self.update_label)
+        self.background.on_mouse_press.subscribe(self.toggle)
+
+    def toggle(self, *args, **kwargs):
+        self.state = not self.state
+        if self.on_toggle is not None:
+            self.on_toggle(self.state)
+    
+    def update_label(self, value: bool):
+        if self.state:
+            self.label.text = self.label_text_true
+        else:
+            self.label.text = self.label_text_false
+

@@ -1,7 +1,9 @@
 from pyglet_pen.interactable import Interactable
-from pyglet_pen.proxies.shapes import RectangleProxy
+from pyglet_pen.proxies.shapes import RectangleProxy, BorderedRectangleProxy
 
 
+class BorderedRectangle(Interactable, BorderedRectangleProxy):
+    pass
 
 class Rectangle(Interactable, RectangleProxy):
     pass
