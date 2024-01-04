@@ -1,16 +1,35 @@
 import pyglet
 import logging
 
+from pyglet_pen.layouts import LayoutMixin
 
-class View:
+
+class View(LayoutMixin):
+
     def __init__(self, window):
         self.logger = logging.getLogger(f"{__name__}")
         self.window = window
+        super().__init__()
         self.batch = pyglet.graphics.Batch()
-        self.widgets = []
         self.focus = None
         self.setup()
         self._mouse_over_widget = None
+
+    @property
+    def width(self):
+        return self.window.width
+    
+    @property
+    def height(self):
+        return self.window.height
+    
+    @property
+    def x(self):
+        return 0
+    
+    @property
+    def y(self):
+        return 0
 
     # Convenience
     def setup(self):
@@ -135,15 +154,12 @@ class View:
 
     def on_text(self, text):
         if self.focus:
-            if hasattr(self.focus, "on_text"):
-                self.focus.on_text(self.window, text)
+            self.focus.on_text(self.window, text)
 
     def on_text_motion(self, motion):
         if self.focus:
-            if hasattr(self.focus, "on_text_motion"):
-                self.focus.on_text_motion(self.window, motion)
+            self.focus.on_text_motion(self.window, motion)
 
     def on_text_motion_select(self, motion):
         if self.focus:
-            if hasattr(self.focus, "on_text_motion_select"):
-                self.focus.on_text_motion_select(self.window, motion)
+            self.focus.on_text_motion_select(self.window, motion)

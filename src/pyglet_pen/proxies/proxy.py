@@ -17,14 +17,10 @@ class Proxy(Component):
 
     batch = ProxyAttribute[Optional[pyglet.graphics.Batch]](None)
     group = ProxyAttribute[Optional[pyglet.graphics.Group]](None)
-
-    def __new__(cls, *args, **kwargs):
-        instance = super().__new__(cls, *args, **kwargs)
-        instance.base = None
-        return instance
     
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.base = None
         self.pre_build()
         self.build()
         self.post_build()

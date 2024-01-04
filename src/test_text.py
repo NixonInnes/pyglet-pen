@@ -27,7 +27,7 @@ def main():
 
     t1 = LabelProxy(x=0, y=0, width=200, height=20, text="Hello World!", batch=batch, group=bg_group)
 
-    l1.add(t1)
+    l1.add_content(t1)
 
     @window.event
     def on_draw():

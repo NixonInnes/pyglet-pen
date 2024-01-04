@@ -65,6 +65,9 @@ class NamedAttributeContainer(metaclass=NamedAttributeMeta):
                 setattr(instance, k, v)
         return instance
     
+    def __init__(self, *args, **kwargs):
+        pass
+    
     @classproperty
     def attribute_name_containers(cls) -> List[str]:
         return cls.__attr_name_containers__

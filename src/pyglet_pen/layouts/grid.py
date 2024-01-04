@@ -10,10 +10,10 @@ class GridLayout(Layout):
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls, *args, **kwargs)
-        instance.contents = {}
+        instance._contents = {}
         for i in range(instance.n_rows):
             for j in range(instance.n_cols):
-                instance.contents[(i, j)] = GridLayoutCell(
+                instance._contents[(i, j)] = GridLayoutCell(
                     vertical_alignment=instance.vertical_alignment,
                     horizontal_alignment=instance.horizontal_alignment,
                     vertical_fill=instance.vertical_fill,
@@ -23,11 +23,15 @@ class GridLayout(Layout):
         return instance
     
     @property
+    def contents(self):
+        return list(self._contents.values())
+    
+    @property
     def n_items(self):
-        return len(self.contents)
+        return len(self._contents)
 
-    def add(self, item, row, col):
-        self.contents[(row, col)].content = item
+    def add_content(self, item, row, col):
+        self._contents[(row, col)].content = item
         self.update_content_geometry()
 
     def update_content_geometry(self):
@@ -45,7 +49,7 @@ class GridLayout(Layout):
 
         for i in range(self.n_rows):
             for j in range(self.n_cols):
-                cell = self.contents[(i, j)]
+                cell = self._contents[(i, j)]
                 cell.x = start_x + (j * cell_width)
                 cell.y = start_y + (i * cell_height)
                 cell.width = cell_width

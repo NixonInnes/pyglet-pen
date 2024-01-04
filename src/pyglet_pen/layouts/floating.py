@@ -12,7 +12,7 @@ class FloatingLayout(Layout):
     def n_items(self):
         return len(self.contents)
     
-    def add(self, item):
+    def add_content(self, item):
         self.contents.append(item)
         self.update_content_geometry()
 

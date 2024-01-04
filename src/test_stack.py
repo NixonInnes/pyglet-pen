@@ -43,10 +43,10 @@ def main():
     r2 = RectangleProxy(width=50, height=50, color=(0, 255, 0, 255),  batch=batch, group=bg_group)
     r3 = RectangleProxy(width=50, height=50, color=(0, 0, 255, 255),  batch=batch, group=bg_group)
 
-    l1.add(l2)
-    l2.add(r1)
-    l2.add(r2)
-    l2.add(r3)
+    l1.add_content(l2)
+    l2.add_content(r1)
+    l2.add_content(r2)
+    l2.add_content(r3)
 
     for item in l2.contents:
         print(item)

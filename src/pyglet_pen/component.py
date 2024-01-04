@@ -1,3 +1,4 @@
+import logging
 from typing import Any, Optional
 from collections import namedtuple
 
@@ -21,9 +22,6 @@ class Component(SubscriberContainer):
         InitialValues = namedtuple("initial", kwargs.keys())
         instance.initial = InitialValues(**kwargs)
         return instance
-    
-    def __init__(self, *args, **kwargs):
-        pass
 
     def passthrough_subscription_factory(self, target: Any, attr_name: str):
         def callback(value):

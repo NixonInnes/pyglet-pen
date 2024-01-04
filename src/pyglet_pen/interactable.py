@@ -13,17 +13,26 @@ class CallbackContainer:
 
 class Interactable:
     mouse_over_enabled = True
+    __callback_containers__ = (
+        ("mouse", "on_mouse_motion"),
+        ("mouse", "on_mouse_enter"),
+        ("mouse", "on_mouse_leave"),
+        ("mouse", "on_mouse_press"),
+        ("mouse", "on_mouse_release"),
+        ("mouse", "on_mouse_scroll"),
+        ("mouse", "on_mouse_drag"),
+        ("text", "on_text"),
+        ("text", "on_text_motion"),
+        ("text", "on_text_motion_select"),
+    )
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls, *args, **kwargs)
-        instance.on_mouse_motion = CallbackContainer()
-        instance.on_mouse_enter = CallbackContainer()
-        instance.on_mouse_leave = CallbackContainer()
-        instance.on_mouse_press = CallbackContainer()
-        instance.on_mouse_release = CallbackContainer()
-        instance.on_mouse_scroll = CallbackContainer()
+        instance._has_focus = False
+        for callback_type, callback_container in cls.__callback_containers__:
+            setattr(instance, callback_container, CallbackContainer())
         return instance
-
+        
     def is_mouse_over(self, x, y):
         if not self.mouse_over_enabled:
             return False
@@ -31,6 +40,20 @@ class Interactable:
             return False
         try:
             return (x, y) in self.base
-        except TypeError:
+        except (AttributeError, TypeError):
             return self.x <= x <= self.x + self.width and self.y <= y <= self.y + self.height
+        
+    def focus(self):
+        self._has_focus = True
+        self.on_focus()
+    
+    def unfocus(self):
+        self._has_focus = False
+        self.on_unfocus()
+
+    def on_focus(self):
+        pass
+
+    def on_unfocus(self):
+        pass
 
