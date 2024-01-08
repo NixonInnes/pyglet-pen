@@ -47,15 +47,15 @@ def main():
     r8 = RectangleProxy(width=50, height=50, color=(128, 128, 128, 255),  batch=batch, group=bg_group)
     r9 = RectangleProxy(width=50, height=50, color=(16, 16, 16, 255),  batch=batch, group=bg_group)
 
-    grid.add(r1, 0, 0)
-    grid.add(r2, 0, 1)
-    grid.add(r3, 0, 2)
-    grid.add(r4, 1, 0)
-    grid.add(r5, 1, 1)
-    grid.add(r6, 1, 2)
-    grid.add(r7, 2, 0)
-    grid.add(r8, 2, 1)
-    grid.add(r9, 2, 2)
+    grid.add_content(r1, 0, 0)
+    grid.add_content(r2, 0, 1)
+    grid.add_content(r3, 0, 2)
+    grid.add_content(r4, 1, 0)
+    grid.add_content(r5, 1, 1)
+    grid.add_content(r6, 1, 2)
+    grid.add_content(r7, 2, 0)
+    grid.add_content(r8, 2, 1)
+    grid.add_content(r9, 2, 2)
 
     @window.event
     def on_draw():

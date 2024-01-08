@@ -24,11 +24,11 @@ class ArcProxy(ShapeProxy):
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
-        self.subscribe_to_property("x", self.x_mod)
-        self.subscribe_to_property("y", self.y_mod)
-        self.subscribe_to_property("width", self.width_mod)
-        self.subscribe_to_property("height", self.height_mod)
-        self.apply_base_property_subscriptions(["visible", "color", "batch", "group"])
+        self.subscribe_to_attribute("x", self.x_mod)
+        self.subscribe_to_attribute("y", self.y_mod)
+        self.subscribe_to_attribute("width", self.width_mod)
+        self.subscribe_to_attribute("height", self.height_mod)
+        self.apply_base_attr_subscriptions(["visible", "color", "batch", "group"])
 
     def x_mod(self, value):
         self.base.x = self.x + self.width // 2
@@ -49,17 +49,17 @@ class ArcProxy(ShapeProxy):
 class CircleProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Circle
     constructor_args = ["x", "y", "radius", "segments", "color", "batch", "group"]
-    base_property_subscriptions = False
+    base_attr_subscriptions = False
     #radius = ProxyAttribute[float](10.0)
     segments = ProxyAttribute[Optional[int]](None)
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
-        self.subscribe_to_property("x", self.x_mod)
-        self.subscribe_to_property("y", self.y_mod)
-        self.subscribe_to_property("width", self.width_mod)
-        self.subscribe_to_property("height", self.height_mod)
-        self.apply_base_property_subscriptions(["visible", "color", "batch", "group"])
+        self.subscribe_to_attribute("x", self.x_mod)
+        self.subscribe_to_attribute("y", self.y_mod)
+        self.subscribe_to_attribute("width", self.width_mod)
+        self.subscribe_to_attribute("height", self.height_mod)
+        self.apply_base_attr_subscriptions(["visible", "color", "batch", "group"])
 
     def x_mod(self, value):
         self.base.x = self.x + self.width // 2
@@ -82,18 +82,18 @@ class CircleProxy(ShapeProxy):
 class EllipseProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Ellipse
     constructor_args = ["x", "y", "a", "b", "segments", "color", "batch", "group"]
-    base_property_subscriptions = False
+    base_attr_subscriptions = False
     # a = ProxyAttribute[float](10.0)
     # b = ProxyAttribute[float](10.0)
     segments = ProxyAttribute[Optional[int]](None)
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
-        self.subscribe_to_property("x", self.x_mod)
-        self.subscribe_to_property("y", self.y_mod)
-        self.subscribe_to_property("width", self.width_mod)
-        self.subscribe_to_property("height", self.height_mod)
-        self.apply_base_property_subscriptions(["visible", "color", "batch", "group"])
+        self.subscribe_to_attribute("x", self.x_mod)
+        self.subscribe_to_attribute("y", self.y_mod)
+        self.subscribe_to_attribute("width", self.width_mod)
+        self.subscribe_to_attribute("height", self.height_mod)
+        self.apply_base_attr_subscriptions(["visible", "color", "batch", "group"])
 
     def x_mod(self, value):
         self.base.x = self.x + self.width // 2
@@ -119,18 +119,18 @@ class EllipseProxy(ShapeProxy):
 class SectorProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Sector
     constructor_args = ["x", "y", "radius", "angle", "start_angle", "color", "batch", "group"]
-    base_property_subscriptions = False
+    base_attr_subscriptions = False
     #radius = ProxyAttribute[float](10.0)
     angle = ProxyAttribute[float](6.283185307179586)
     start_angle = ProxyAttribute[float](0.0)
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
-        self.subscribe_to_property("x", self.x_mod)
-        self.subscribe_to_property("y", self.y_mod)
-        self.subscribe_to_property("width", self.width_mod)
-        self.subscribe_to_property("height", self.height_mod)
-        self.apply_base_property_subscriptions(["visible", "color", "batch", "group"])
+        self.subscribe_to_attribute("x", self.x_mod)
+        self.subscribe_to_attribute("y", self.y_mod)
+        self.subscribe_to_attribute("width", self.width_mod)
+        self.subscribe_to_attribute("height", self.height_mod)
+        self.apply_base_attr_subscriptions(["visible", "color", "batch", "group"])
 
     def x_mod(self, value):
         self.base.x = self.x + self.width // 2
@@ -153,15 +153,15 @@ class LineProxy(ShapeProxy):
     BaseConstructor = pyglet.shapes.Line
     constructor_args = ["x", "y", "width", "height", "thickness", "color", "batch", "group"]
     constructor_aliases = {"thickness": "width", "width": "x2", "height": "y2"}
-    base_property_subscriptions = False
+    base_attr_subscriptions = False
 
     thickness = ProxyAttribute[int](1)
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
-        self.subscribe_to_property("width", self.width_mod)
-        self.subscribe_to_property("height", self.height_mod)
-        self.apply_base_property_subscriptions(["x", "y", "visible", "color", "batch", "group"])
+        self.subscribe_to_attribute("width", self.width_mod)
+        self.subscribe_to_attribute("height", self.height_mod)
+        self.apply_base_attr_subscriptions(["x", "y", "visible", "color", "batch", "group"])
     
     def width_mod(self, value):
         self.base.x2 = self.x + self.width

@@ -26,13 +26,12 @@ def main():
     )
 
     r1 = RectangleProxy(width=300, height=300, color=(255, 0, 0, 255), batch=batch, group=bg_group)
-    print(r1.named_attributes)
     r2 = RectangleProxy(width=100, height=100, color=(0, 255, 0, 255),  batch=batch, group=bg_group)
     r3 = RectangleProxy(width=50, height=50, color=(0, 0, 255, 255),  batch=batch, group=bg_group)
 
-    layout.add(r1)
-    layout.add(r2)
-    layout.add(r3)
+    layout.add_content(r1)
+    layout.add_content(r2)
+    layout.add_content(r3)
 
     @window.event
     def on_draw():

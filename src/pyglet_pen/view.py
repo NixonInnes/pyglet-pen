@@ -2,9 +2,11 @@ import pyglet
 import logging
 
 from pyglet_pen.layouts import LayoutMixin
+from pyglet_pen.elements.shapes import Background
 
 
 class View(LayoutMixin):
+    background_color = (0, 0, 0, 255)
 
     def __init__(self, window):
         self.logger = logging.getLogger(f"{__name__}")
@@ -14,6 +16,15 @@ class View(LayoutMixin):
         self.focus = None
         self.setup()
         self._mouse_over_widget = None
+        self.background = Background(
+            x=self.x,
+            y=self.y,
+            width=self.width,
+            height=self.height,
+            color=self.background_color,
+            batch=self.batch,
+            group=pyglet.graphics.Group(0)
+        )
 
     @property
     def width(self):
@@ -135,7 +146,11 @@ class View(LayoutMixin):
             self.set_focus(None)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        pass
+        if self._mouse_over_widget is not None:
+            self.set_focus(self._mouse_over_widget)
+            self._mouse_over_widget.on_mouse_release(self.window, x, y, button, modifiers)
+        else:
+            self.set_focus(None)
 
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
         pass
@@ -147,7 +162,9 @@ class View(LayoutMixin):
         pass
 
     def on_resize(self, width, height):
-        pass
+        if self.layout:
+            self.layout.width = width
+            self.layout.height = height
 
     def on_show(self):
         pass

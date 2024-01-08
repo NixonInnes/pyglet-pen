@@ -42,3 +42,4 @@ class Widget(Interactable, LayoutMixin, Component):
                         lambda *_, **__: print(f"No container {callback_container}")
                     )(*args, **kwargs)
         return callback
+    

@@ -2,7 +2,7 @@ import pyglet
 from typing import Callable, Optional
 
 from pyglet_pen.layouts import FloatingLayout
-from pyglet_pen.elements.shapes import Rectangle, BorderedRectangle
+from pyglet_pen.elements.shapes import BorderedRectangle
 from pyglet_pen.elements.text import Label
 from pyglet_pen.utilities.types import ColorType
 
@@ -10,21 +10,21 @@ from pyglet_pen.utilities.types import ColorType
 from .widget import Widget, WidgetAttribute
 
 
-class ButtonWidget(Widget):
+class BaseButtonWidget(Widget):
     Layout = FloatingLayout
     
     label_text = WidgetAttribute[str]("Button")
     label_color = WidgetAttribute[ColorType]((255, 255, 255, 255))
-    label_font_name = WidgetAttribute[str]("Arial")
+    label_font_name = WidgetAttribute[str]("Noto Sans")
     label_font_size = WidgetAttribute[int](12)
 
     background_color = WidgetAttribute[ColorType]((100, 100, 100, 255))
-    border_color = WidgetAttribute[ColorType]((20, 20, 20, 255))
+    border_color = WidgetAttribute[ColorType]((25, 25, 25, 255))
     border_width = WidgetAttribute[int](3)
     
     batch = WidgetAttribute[Optional[pyglet.graphics.Batch]](None)
-    button_group = WidgetAttribute[Optional[pyglet.graphics.Group]](None)
-    label_group = WidgetAttribute[Optional[pyglet.graphics.Group]](None)
+    button_group = WidgetAttribute[Optional[pyglet.graphics.Group]](pyglet.graphics.Group(2))
+    label_group = WidgetAttribute[Optional[pyglet.graphics.Group]](pyglet.graphics.Group(3))
     
     on_click = WidgetAttribute[Optional[Callable]](None)
 
@@ -76,6 +76,22 @@ class ButtonWidget(Widget):
             align="center",
         )
         return label
+
+class ButtonWidget(BaseButtonWidget):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+
+        self._current_background_color = self.background_color
+        self.on_mouse_press.subscribe(self.press_animation)
+        self.on_mouse_release.subscribe(self.release_animation)
+
+    def press_animation(self, *args, **kwargs):
+        self._current_background_color = self.background.color
+        r, g, b, a = self.background.color
+        self.background.color = (max(0, r-25), max(0, g-25), max(0, b-25), a)
+    
+    def release_animation(self, *args, **kwargs):
+        self.background.color = self._current_background_color
 
 class ToggleButtonWidget(ButtonWidget):
     state = WidgetAttribute[bool](False)

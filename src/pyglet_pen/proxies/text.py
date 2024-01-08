@@ -1,5 +1,5 @@
 import pyglet
-from typing import Optional, Callable
+from typing import Optional
 
 from pyglet_pen.utilities.types import ColorType, AnchorType
 
@@ -17,7 +17,7 @@ class LabelProxy(Proxy):
     anchor_y = ProxyAttribute[AnchorType]("baseline")
     text = ProxyAttribute[str]("")
     align = ProxyAttribute[str]("left")
-    font_name = ProxyAttribute[str]("Arial")
+    font_name = ProxyAttribute[str]("Noto Sans")
     font_size = ProxyAttribute[int](12)
     bold = ProxyAttribute[bool](False)
     italic = ProxyAttribute[bool](False)
@@ -25,6 +25,18 @@ class LabelProxy(Proxy):
     color = ProxyAttribute[ColorType]((255, 255, 255, 255))
     rotation = ProxyAttribute[int](0)
     multiline = ProxyAttribute[bool](False)
+
+
+class HTMLLabelProxy(Proxy):
+    BaseConstructor = pyglet.text.HTMLLabel
+    constructor_args = ["text", "location", "x", "y", "width", "height", "anchor_x", "anchor_y", "rotation", "multiline", "dpi", "batch", "group"]
+    text = ProxyAttribute[str]("")
+    location = ProxyAttribute[Optional[str]](None)
+    anchor_x = ProxyAttribute[AnchorType]("left")
+    anchor_y = ProxyAttribute[AnchorType]("baseline")
+    rotation = ProxyAttribute[int](0)
+    multiline = ProxyAttribute[bool](False)
+    dpi = ProxyAttribute[Optional[int]](None)
 
 
 class IncrementalTextLayoutProxy(Proxy):
@@ -37,7 +49,7 @@ class IncrementalTextLayoutProxy(Proxy):
     dpi = ProxyAttribute[Optional[int]](None)
     wrap_lines = ProxyAttribute[bool](True)
     font_color = ProxyAttribute[ColorType]((255, 255, 255, 255))
-    font_name = ProxyAttribute[str]("Arial")
+    font_name = ProxyAttribute[str]("Noto Sans")
     font_size = ProxyAttribute[int](12)
 
     def pre_build(self):

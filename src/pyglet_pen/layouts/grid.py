@@ -1,5 +1,3 @@
-from typing import Literal
-
 
 from .layout import Layout, LayoutAttribute
 
@@ -25,16 +23,13 @@ class GridLayout(Layout):
     @property
     def contents(self):
         return list(self._contents.values())
-    
-    @property
-    def n_items(self):
-        return len(self._contents)
 
     def add_content(self, item, row, col):
-        self._contents[(row, col)].content = item
-        self.update_content_geometry()
+        self._contents[(row, col)].add_content(item)
+        # self.update_content_geometry()
 
     def update_content_geometry(self):
+        print("Updating content geometry")
         if self.n_items < 1:
             return
         
@@ -59,39 +54,45 @@ class GridLayout(Layout):
         
 
 class GridLayoutCell(Layout):
-    vertical_alignment = LayoutAttribute[Literal["top", "center", "bottom"]]("center")
-    horizontal_alignment = LayoutAttribute[Literal["left", "center", "right"]]("center")
-    vertical_fill = LayoutAttribute[bool](False)
-    horizontal_fill = LayoutAttribute[bool](False)
-    margin = LayoutAttribute[int](0)
+    def __new__(cls, *args, **kwargs):
+        instance = super().__new__(cls, *args, **kwargs)
+        instance._contents = None
+        return instance
+    
+    @property
+    def contents(self):
+        return [self._contents]
+    
+    @property
+    def content(self):
+        return self._contents
+    
+    def add_content(self, item):
+        self._contents = item
+        self.update_content_geometry()
 
-    def __init__(self, *args, **kwargs):
-        self.content = None
     
     def update_content_geometry(self):
         if self.content is None:
             return
-        
-        available_width = self.width - (2 * self.margin)
-        available_height = self.height - (2 * self.margin)
 
         start_x = self.x + self.margin
         start_y = self.y + self.margin
 
         if self.horizontal_fill:
-            self.content.width = available_width
+            self.content.width = self.available_width
         else:
             self.content.width = self.content.initial.width
         
         if self.vertical_fill:
-            self.content.height = available_height
+            self.content.height = self.available_height
         else:
             self.content.height = self.content.initial.height
 
         if self.horizontal_alignment == "left":
             self.content.x = start_x
         else:
-            space = available_width - self.content.width
+            space = self.available_width - self.content.width
             if self.horizontal_alignment == "center":
                 self.content.x = start_x + (space // 2)
             elif self.horizontal_alignment == "right":
@@ -102,7 +103,7 @@ class GridLayoutCell(Layout):
         if self.vertical_alignment == "bottom":
             self.content.y = start_y
         else:
-            space = available_height - self.content.height
+            space = self.available_height - self.content.height
             if self.vertical_alignment == "center":
                 self.content.y = start_y + (space // 2)
             elif self.vertical_alignment == "top":

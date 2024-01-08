@@ -1,9 +1,12 @@
 from pyglet_pen.interactable import Interactable
-from pyglet_pen.proxies.text import LabelProxy, IncrementalTextLayoutProxy
+from pyglet_pen.proxies.text import HTMLLabelProxy, LabelProxy, IncrementalTextLayoutProxy
 
 
 
 class Label(Interactable, LabelProxy):
+    pass
+
+class HTMLLabel(Interactable, HTMLLabelProxy):
     pass
 
 

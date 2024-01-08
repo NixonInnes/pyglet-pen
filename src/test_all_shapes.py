@@ -51,7 +51,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s1, 0, 0)
+    grid.add_content(s1, 0, 0)
 
     s2 = shapes.CircleProxy(
         x=0,
@@ -63,7 +63,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s2, 0, 1)
+    grid.add_content(s2, 0, 1)
 
     s3 = shapes.EllipseProxy(
         x=0,
@@ -76,7 +76,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s3, 0, 2)
+    grid.add_content(s3, 0, 2)
 
     s4 = shapes.SectorProxy(
         x=0,
@@ -90,7 +90,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s4, 0, 3)
+    grid.add_content(s4, 0, 3)
 
     s5 = shapes.LineProxy(
         x=0,
@@ -104,7 +104,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s5, 0, 4)
+    grid.add_content(s5, 0, 4)
 
     s6 = shapes.RectangleProxy(
         x=0,
@@ -115,7 +115,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s6, 0, 5)
+    grid.add_content(s6, 0, 5)
 
     s7 = shapes.BoxProxy(
         x=0,
@@ -127,7 +127,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s7, 0, 6)
+    grid.add_content(s7, 0, 6)
 
     s8 = shapes.BorderedRectangleProxy(
         x=0,
@@ -140,7 +140,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s8, 1, 0)
+    grid.add_content(s8, 1, 0)
 
     s9 = shapes.TriangleProxy(
         x=0,
@@ -155,7 +155,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s9, 1, 1)
+    grid.add_content(s9, 1, 1)
 
     s10 = shapes.StarProxy(
         x=0,
@@ -169,7 +169,7 @@ def main():
         batch=batch,
         group=bg_group,
     )
-    grid.add(s10, 1, 2)
+    grid.add_content(s10, 1, 2)
 
 
     @window.event

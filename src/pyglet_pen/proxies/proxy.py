@@ -16,7 +16,7 @@ class Proxy(Component):
     base_attr_subscriptions = True
 
     batch = ProxyAttribute[Optional[pyglet.graphics.Batch]](None)
-    group = ProxyAttribute[Optional[pyglet.graphics.Group]](None)
+    group = ProxyAttribute[pyglet.graphics.Group](pyglet.graphics.Group(1))
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

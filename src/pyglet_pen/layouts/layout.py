@@ -1,4 +1,5 @@
 from typing import Literal
+import pyglet
 
 from pyglet_pen.component import Component, ComponentAttribute
 from pyglet_pen.utilities.types import T
@@ -12,16 +13,48 @@ class Layout(Component):
     vertical_fill = LayoutAttribute[bool](False)
     horizontal_fill = LayoutAttribute[bool](False)
     margin = LayoutAttribute[int](0)
+    allow_oversize = LayoutAttribute[bool](False)
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls, *args, **kwargs)
-        instance.subscribe_to_attribute("x", lambda _: instance.update_content_geometry())
-        instance.subscribe_to_attribute("y", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("x", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("y", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("width", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("height", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("vertical_alignment", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("horizontal_alignment", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("vertical_fill", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("horizontal_fill", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("margin", lambda _: instance.update_content_geometry())
+        # instance.subscribe_to_attribute("allow_oversize", lambda _: instance.update_content_geometry())
         return instance
-
+    
+    @property
+    def contents(self):
+        raise NotImplementedError()
+    
     @property
     def n_items(self):
-        raise NotImplementedError()
+        return len(self.contents)
+    
+    @property
+    def available_width(self):
+        return self.width - (2 * self.margin)
+    
+    @property
+    def available_height(self):
+        return self.height - (2 * self.margin)
+    
+    def adjust_item_size(self, item):
+        if self.horizontal_fill:
+            item.width = self.available_width
+        else:
+            item.width = min(self.width, item.initial.width)
+        
+        if self.vertical_fill:
+            item.height = self.available_height
+        else:
+            item.height = min(self.height, item.initial.height)
     
     def add_content(self, item):
         raise NotImplementedError()
@@ -36,15 +69,16 @@ class Layout(Component):
             else:
                 yield item
 
+
 class DummyLayout(Layout):
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls, *args, **kwargs)
-        instance.contents = []
+        instance._contents = []
         return instance
     
     @property
-    def n_items(self):
-        return len(self.contents)
+    def contents(self):
+        return self._contents
     
     def add_content(self, item):
         self.contents.append(item)
@@ -60,7 +94,6 @@ class LayoutMixin:
         super().__init__(*args, **kwargs)
         if self.Layout is None:
             self.layout = DummyLayout()
-            print("Using dummy layout")
         else:
             self.layout = self.Layout(
                 x=self.x or 0, 
@@ -69,9 +102,11 @@ class LayoutMixin:
                 height=self.height
             )
         
-
     def add_content(self, item, *args, **kwargs):
         self.layout.add_content(item, *args, **kwargs)
+
+    def update_content_geometry(self):
+        self.layout.update_content_geometry()
 
     @property
     def widgets(self):

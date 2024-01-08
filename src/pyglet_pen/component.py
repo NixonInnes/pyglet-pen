@@ -19,8 +19,8 @@ class Component(SubscriberContainer):
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls, *args, **kwargs)
-        InitialValues = namedtuple("initial", kwargs.keys())
-        instance.initial = InitialValues(**kwargs)
+        InitialValues = namedtuple("initial", set(instance.named_attributes))
+        instance.initial = InitialValues(**{attr: getattr(instance, attr) for attr in instance.named_attributes})
         return instance
 
     def passthrough_subscription_factory(self, target: Any, attr_name: str):
