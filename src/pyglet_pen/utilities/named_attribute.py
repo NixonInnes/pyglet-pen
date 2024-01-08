@@ -2,8 +2,6 @@ from collections import defaultdict
 from itertools import chain
 from typing import List, Optional
 
-from pprint import pprint
-
 from .classproperty import classproperty
 
 

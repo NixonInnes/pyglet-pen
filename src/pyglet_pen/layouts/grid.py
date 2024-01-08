@@ -32,7 +32,6 @@ class GridLayout(Layout):
         # self.update_content_geometry()
 
     def update_content_geometry(self):
-        print("Updating content geometry")
         if self.n_items < 1:
             return
 
