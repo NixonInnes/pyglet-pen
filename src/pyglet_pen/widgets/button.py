@@ -35,7 +35,7 @@ class BaseButtonWidget(Widget):
         self.subscribe_to_attribute("border_color", lambda value: setattr(self.background, "border_color", value))
         self.subscribe_to_attribute("border_width", lambda value: setattr(self.background, "border", value))
         if self.on_click is not None:
-            self.background.on_mouse_press.subscribe(self.on_click)
+            self.background.on_mouse_release.subscribe(self.on_click)
         
         self.label = self.build_label()
         self.subscribe_to_attribute("label_text", lambda value: setattr(self.label, "text", value))
@@ -80,7 +80,6 @@ class BaseButtonWidget(Widget):
 class ButtonWidget(BaseButtonWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
-
         self._current_background_color = self.background_color
         self.on_mouse_press.subscribe(self.press_animation)
         self.on_mouse_release.subscribe(self.release_animation)

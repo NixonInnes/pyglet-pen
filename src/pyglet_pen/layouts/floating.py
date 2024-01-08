@@ -51,7 +51,7 @@ class FloatingLayout(Layout):
 
                 case (False, True, False):
                     item.width = min(self.available_width, item.initial.width)
-                    item.height = min(self.available_height, item.initial.height)
+                    item.height = self.available_height
                 
                 case (False, False, True):
                     item.width = item.initial.width

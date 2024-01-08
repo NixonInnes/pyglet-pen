@@ -29,7 +29,7 @@ class Widget(Interactable, LayoutMixin, Component):
                         widget, 
                         callback_container, 
                         lambda *_, **__: print(f"No container {callback_container}")
-                    )(*args, **kwargs)
+                    )(window, x, y, *args, **kwargs)
         return callback
     
     def text_callback_factory(self, callback_container):

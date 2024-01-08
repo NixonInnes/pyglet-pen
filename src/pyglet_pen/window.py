@@ -1,12 +1,15 @@
 import logging
 import pyglet
 
+from .view import View
+
 
 class Window(pyglet.window.Window):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.logger = logging.getLogger(__name__)
         
+        self.previous_view = None
         self.active_view = None
         self.views = {
         }
@@ -14,13 +17,27 @@ class Window(pyglet.window.Window):
 
     def set_view(self, view_name):
         self.logger.debug(f"Setting view to {view_name}")
-        previous_view = self.active_view
-        if previous_view:
-            previous_view.on_exit()
 
-        if view_name in self.views:
+        if isinstance(view_name, str):
+            if view_name not in self.views:
+                raise ValueError(f"View {view_name} does not exist")
+            
+            self.previous_view = self.active_view
+            if self.previous_view:
+                self.previous_view.on_exit()
+
             self.active_view = self.views[view_name]
             self.active_view.on_enter()
+
+        elif isinstance(view_name, View):
+            self.previous_view = self.active_view
+            if self.previous_view:
+                self.previous_view.on_exit()
+
+            self.active_view = view_name
+            self.active_view.on_enter()
+        else:
+            raise ValueError(f"Invalid view type {type(view_name)}")
 
     def process_message(self, message):
         if self.active_view:

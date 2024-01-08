@@ -151,7 +151,5 @@ class ButtonsView(View):
         self.layout.update_content_geometry()
         
 
-    def on_click_button_callback(self, *_, **__):
-        r, g, b = randint(0, 255), randint(0, 255), randint(0, 255)
-        self.on_click_button.background_color = (r, g, b, 255)
-        self.on_click_button.border_color = (r//5, g//5, b//5, 255)
+    def on_click_button_callback(self, window, x, y, button, modifiers):
+        print(f"On-Click Button clicked @({x}, {y}) by {button} with modifiers {modifiers}")
