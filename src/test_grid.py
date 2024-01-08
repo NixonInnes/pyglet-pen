@@ -22,7 +22,7 @@ def main():
         horizontal_alignment="center",
         vertical_fill=False,
         horizontal_fill=False,
-        margin=5,
+        margin=10,
     )
     boxes = []
     for r in range(grid.n_rows):
@@ -46,6 +46,7 @@ def main():
     r7 = RectangleProxy(width=50, height=50, color=(255, 255, 255, 255),  batch=batch, group=bg_group)
     r8 = RectangleProxy(width=50, height=50, color=(128, 128, 128, 255),  batch=batch, group=bg_group)
     r9 = RectangleProxy(width=50, height=50, color=(16, 16, 16, 255),  batch=batch, group=bg_group)
+    print(grid)
 
     grid.add_content(r1, 0, 0)
     grid.add_content(r2, 0, 1)
@@ -56,6 +57,8 @@ def main():
     grid.add_content(r7, 2, 0)
     grid.add_content(r8, 2, 1)
     grid.add_content(r9, 2, 2)
+
+    grid.update_content_geometry()
 
     @window.event
     def on_draw():

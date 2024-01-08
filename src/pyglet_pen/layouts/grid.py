@@ -5,6 +5,7 @@ from .layout import Layout, LayoutAttribute
 class GridLayout(Layout):
     n_rows = LayoutAttribute[int](1)
     n_cols = LayoutAttribute[int](1)
+    cell_margin = LayoutAttribute[int](0)
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls, *args, **kwargs)
@@ -12,11 +13,13 @@ class GridLayout(Layout):
         for i in range(instance.n_rows):
             for j in range(instance.n_cols):
                 instance._contents[(i, j)] = GridLayoutCell(
+                    width=instance.available_width // instance.n_cols,
+                    height=instance.available_height // instance.n_rows,
                     vertical_alignment=instance.vertical_alignment,
                     horizontal_alignment=instance.horizontal_alignment,
                     vertical_fill=instance.vertical_fill,
                     horizontal_fill=instance.horizontal_fill,
-                    margin=instance.margin,
+                    margin=instance.cell_margin,
                 )
         return instance
     
@@ -32,15 +35,12 @@ class GridLayout(Layout):
         print("Updating content geometry")
         if self.n_items < 1:
             return
-        
-        available_width = self.width
-        available_height = self.height
 
-        start_x = self.x
-        start_y = self.y
+        start_x = self.x + self.margin
+        start_y = self.y + self.margin
 
-        cell_width = available_width // self.n_cols
-        cell_height = available_height // self.n_rows
+        cell_width = self.available_width // self.n_cols
+        cell_height = self.available_height // self.n_rows
 
         for i in range(self.n_rows):
             for j in range(self.n_cols):
@@ -49,10 +49,13 @@ class GridLayout(Layout):
                 cell.y = start_y + (i * cell_height)
                 cell.width = cell_width
                 cell.height = cell_height
+                cell.vertical_alignment = self.vertical_alignment
+                cell.horizontal_alignment = self.horizontal_alignment
+                cell.vertical_fill = self.vertical_fill
+                cell.horizontal_fill = self.horizontal_fill
                 cell.update_content_geometry()
 
         
-
 class GridLayoutCell(Layout):
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls, *args, **kwargs)
@@ -69,9 +72,7 @@ class GridLayoutCell(Layout):
     
     def add_content(self, item):
         self._contents = item
-        self.update_content_geometry()
 
-    
     def update_content_geometry(self):
         if self.content is None:
             return

@@ -2,14 +2,16 @@ import pyglet
 
 from pyglet_pen.window import Window
 
-from pyglet_pen.example.views import ButtonsView, LayoutsView, MenuView
+from pyglet_pen.example.views import ButtonsView, MenuView, StackLayoutView, FloatingLayoutView, GridLayoutView
 
 
 if __name__ == "__main__":
     window = Window(caption="Pyglet Pen Example")
     print(f"Window: {window.width}x{window.height}")
     window.views["buttons"] = ButtonsView(window)
-    window.views["layouts"] = LayoutsView(window)
+    window.views["stack_layout"] = StackLayoutView(window)
+    window.views["floating_layout"] = FloatingLayoutView(window)
+    window.views["grid_layout"] = GridLayoutView(window)
     window.views["menu"] = MenuView(window)
     window.set_view("menu")
 
